@@ -12,10 +12,11 @@
     "README.md",
     "SECURITY.md",
     "SKILL.md",
-    "scripts/install.mjs"
+    "scripts/install.mjs",
+    "scripts/register.mjs"
   ],
   "scripts": {
-    "test": "node scripts/verify-public-tree.mjs"
+    "test": "node scripts/verify-public-tree.mjs && node scripts/verify-registration.mjs"
   },
   "engines": {
     "node": ">=18"

@@ -55,6 +55,7 @@ const packResult = JSON.parse(execFileSync(npmCommand, npmArgs, {
 const packedFiles = packResult[0]?.files?.map((file) => file.path).sort() || [];
 const expectedPackedFiles = [
   'LICENSE', 'README.md', 'SECURITY.md', 'SKILL.md', 'package.json', 'scripts/install.mjs',
+  'scripts/register.mjs',
 ].sort();
 if (JSON.stringify(packedFiles) !== JSON.stringify(expectedPackedFiles)) {
   failures.push(`npm package allowlist mismatch: ${packedFiles.join(',')}`);
@@ -69,6 +70,13 @@ try {
   });
   const installed = readFileSync(resolve(tempHome, '.codex', 'skills', 'harvest', 'SKILL.md'), 'utf8');
   if (installed !== skill) failures.push('isolated Codex install differs from root SKILL.md');
+  const installedRegistration = readFileSync(
+    resolve(tempHome, '.codex', 'skills', 'harvest', 'register.mjs'),
+    'utf8',
+  );
+  if (installedRegistration !== readFileSync(resolve(root, 'scripts', 'register.mjs'), 'utf8')) {
+    failures.push('isolated Codex registration helper differs from source');
+  }
 } finally {
   rmSync(tempHome, { recursive: true, force: true });
 }
