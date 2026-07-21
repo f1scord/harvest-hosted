@@ -7,14 +7,14 @@ authorized Google Meet through Harvest.
 
 Give your coding agent this prompt:
 
-> Clone `https://github.com/GigRadar/harvest-hosted.git`, read its root
+> Clone `https://github.com/f1scord/harvest-hosted.git`, read its root
 > `SKILL.md` completely, run the installer for your runtime, and follow the
 > skill. Do not print or commit credentials.
 
 Or install it yourself:
 
 ```sh
-git clone https://github.com/GigRadar/harvest-hosted.git
+git clone https://github.com/f1scord/harvest-hosted.git
 cd harvest-hosted
 node scripts/install.mjs --runtime codex
 ```

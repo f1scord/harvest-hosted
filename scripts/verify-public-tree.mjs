@@ -35,7 +35,7 @@ for (const path of files) {
 const readme = readFileSync(resolve(root, 'README.md'), 'utf8');
 const skill = readFileSync(resolve(root, 'SKILL.md'), 'utf8');
 const license = readFileSync(resolve(root, 'LICENSE'), 'utf8');
-if (!readme.includes('https://github.com/GigRadar/harvest-hosted.git')) failures.push('README clone URL missing');
+if (!readme.includes('https://github.com/f1scord/harvest-hosted.git')) failures.push('README clone URL missing');
 if (!skill.startsWith('---\nname: harvest\n')) failures.push('SKILL.md frontmatter invalid');
 if (!license.includes('All rights reserved.')) failures.push('proprietary license marker missing');
 
