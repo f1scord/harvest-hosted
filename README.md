@@ -21,7 +21,10 @@ node scripts/install.mjs --runtime codex
 
 For Claude Code, replace `codex` with `claude-code`.
 
-## Secondary setup with npm
+## Secondary setup with npm (pending publication)
+
+This command is reserved for the first registry release and does not work until
+`harvest-hosted@0.1.0` is visible on npm. Use the primary Git clone path now.
 
 ```sh
 npx harvest-hosted@0.1.0 --runtime codex
