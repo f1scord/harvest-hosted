@@ -21,6 +21,15 @@ node scripts/install.mjs --runtime codex
 
 For Claude Code, replace `codex` with `claude-code`.
 
+## Secondary setup with npm
+
+```sh
+npx harvest-hosted@0.1.0 --runtime codex
+```
+
+The Git clone + root `SKILL.md` path above is the primary onboarding path. npm
+is a secondary installer with the same fail-closed behavior.
+
 The installer copies only `SKILL.md`. It never reads, writes, or prints API
 keys. If a skill already exists, installation stops unless its contents are
 already identical. Remove or back up an old installation yourself before
@@ -42,8 +51,8 @@ it does not borrow a demo, shared, or another user's token.
 node scripts/verify-public-tree.mjs
 ```
 
-The verifier checks the public allowlist, required documentation, forbidden
-names, likely secret material, and the installer in an isolated temporary home.
+The verifier checks the public allowlist, required documentation, likely secret
+material, npm package contents, and the installer in an isolated temporary home.
 
 ## License
 

@@ -1,0 +1,31 @@
+{
+  "name": "harvest-hosted",
+  "version": "0.1.0",
+  "description": "Install the proprietary Harvest meeting skill for supported agent runtimes",
+  "license": "UNLICENSED",
+  "type": "module",
+  "bin": {
+    "harvest-hosted": "scripts/install.mjs"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "SECURITY.md",
+    "SKILL.md",
+    "scripts/install.mjs"
+  ],
+  "scripts": {
+    "test": "node scripts/verify-public-tree.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f1scord/harvest-hosted.git"
+  },
+  "homepage": "https://tryharvest.ai/docs",
+  "publishConfig": {
+    "access": "public"
+  }
+}

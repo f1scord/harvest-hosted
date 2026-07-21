@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const allowedTopLevel = new Set([
   '.git', '.gitignore', 'LICENSE', 'README.md', 'SECURITY.md', 'SKILL.md', 'scripts',
+  'package.json',
 ]);
 const secretPatterns = [
   /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
@@ -35,9 +36,29 @@ for (const path of files) {
 const readme = readFileSync(resolve(root, 'README.md'), 'utf8');
 const skill = readFileSync(resolve(root, 'SKILL.md'), 'utf8');
 const license = readFileSync(resolve(root, 'LICENSE'), 'utf8');
+const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 if (!readme.includes('https://github.com/f1scord/harvest-hosted.git')) failures.push('README clone URL missing');
 if (!skill.startsWith('---\nname: harvest\n')) failures.push('SKILL.md frontmatter invalid');
 if (!license.includes('All rights reserved.')) failures.push('proprietary license marker missing');
+if (packageJson.name !== 'harvest-hosted' || packageJson.version !== '0.1.0') failures.push('npm identity mismatch');
+if (packageJson.license !== 'UNLICENSED') failures.push('npm package must remain proprietary');
+
+const npmCommand = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : 'npm';
+const npmArgs = process.platform === 'win32'
+  ? ['/d', '/s', '/c', 'npm pack --dry-run --json']
+  : ['pack', '--dry-run', '--json'];
+const packResult = JSON.parse(execFileSync(npmCommand, npmArgs, {
+  cwd: root,
+  encoding: 'utf8',
+  stdio: ['ignore', 'pipe', 'pipe'],
+}));
+const packedFiles = packResult[0]?.files?.map((file) => file.path).sort() || [];
+const expectedPackedFiles = [
+  'LICENSE', 'README.md', 'SECURITY.md', 'SKILL.md', 'package.json', 'scripts/install.mjs',
+].sort();
+if (JSON.stringify(packedFiles) !== JSON.stringify(expectedPackedFiles)) {
+  failures.push(`npm package allowlist mismatch: ${packedFiles.join(',')}`);
+}
 
 const tempHome = mkdtempSync(resolve(tmpdir(), 'harvest-skill-verify-'));
 try {
@@ -56,7 +77,7 @@ if (failures.length) {
   for (const failure of failures) console.error(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log(`PASS public-tree files=${files.length} possible_secrets=0 isolated_install=green`);
+console.log(`PASS public-tree files=${files.length} npm_files=${packedFiles.length} possible_secrets=0 isolated_install=green`);
 
 function walk(path) {
   const output = [];
