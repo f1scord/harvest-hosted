@@ -37,6 +37,7 @@ const readme = readFileSync(resolve(root, 'README.md'), 'utf8');
 const skill = readFileSync(resolve(root, 'SKILL.md'), 'utf8');
 const license = readFileSync(resolve(root, 'LICENSE'), 'utf8');
 const registrationHelper = readFileSync(resolve(root, 'scripts', 'register.mjs'), 'utf8');
+const mcpHeadersHelper = readFileSync(resolve(root, 'scripts', 'mcp-headers.mjs'), 'utf8');
 const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 if (!readme.includes('https://github.com/f1scord/harvest-hosted.git')) failures.push('README clone URL missing');
 if (!/^---\r?\nname: harvest\r?\n/.test(skill)) failures.push('SKILL.md frontmatter invalid');
@@ -61,7 +62,7 @@ const packResult = JSON.parse(execFileSync(npmCommand, npmArgs, {
 const packedFiles = packResult[0]?.files?.map((file) => file.path).sort() || [];
 const expectedPackedFiles = [
   'LICENSE', 'README.md', 'SECURITY.md', 'SKILL.md', 'package.json', 'scripts/install.mjs',
-  'scripts/register.mjs',
+  'scripts/mcp-headers.mjs', 'scripts/register.mjs',
 ].sort();
 if (JSON.stringify(packedFiles) !== JSON.stringify(expectedPackedFiles)) {
   failures.push(`npm package allowlist mismatch: ${packedFiles.join(',')}`);
@@ -82,6 +83,13 @@ try {
   );
   if (installedRegistration !== readFileSync(resolve(root, 'scripts', 'register.mjs'), 'utf8')) {
     failures.push('isolated Codex registration helper differs from source');
+  }
+  const installedHeaders = readFileSync(
+    resolve(tempHome, '.codex', 'skills', 'harvest', 'mcp-headers.mjs'),
+    'utf8',
+  );
+  if (installedHeaders !== mcpHeadersHelper) {
+    failures.push('isolated Codex MCP headers helper differs from source');
   }
 } finally {
   rmSync(tempHome, { recursive: true, force: true });
