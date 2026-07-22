@@ -4,6 +4,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, wri
 import { homedir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
+const DEFAULT_API_URL = 'https://gateway.tryharvest.ai';
 const values = process.argv.slice(2);
 const action = values.shift();
 
@@ -76,7 +77,7 @@ function parseRegistrationArgs(action, args) {
   const parsed = {
     email: '',
     code: '',
-    apiUrl: (process.env.HARVEST_REGISTRATION_API_URL || '').replace(/\/+$/, ''),
+    apiUrl: (process.env.HARVEST_REGISTRATION_API_URL || DEFAULT_API_URL).replace(/\/+$/, ''),
   };
   for (let index = 0; index < args.length; index += 1) {
     const value = args[index];
@@ -87,7 +88,6 @@ function parseRegistrationArgs(action, args) {
   }
   if (!validEmail(parsed.email)) throw new Error('email is invalid');
   if (action === 'verify' && !/^\d{6}$/.test(parsed.code)) throw new Error('code must contain six digits');
-  if (!parsed.apiUrl) throw new Error('HARVEST_REGISTRATION_API_URL or --api-url is required; public registration is not live');
   validateEndpoint(parsed.apiUrl, 'Harvest registration URL');
   return parsed;
 }

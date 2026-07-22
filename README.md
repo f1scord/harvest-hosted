@@ -41,13 +41,11 @@ remove or back up an old installation yourself before replacing it.
   explicitly approved fake/staging registration URL
 - A Harvest MCP endpoint configured by the supported client
 
-## Offline or staging registration
+## Self-serve registration
 
-Public email-code registration is not enabled yet. For an approved fake or
-staging gateway, set `HARVEST_REGISTRATION_API_URL` and follow the installed
-skill. The helper performs email-code registration, saves the returned
-credential with private file permissions, and can probe MCP without printing
-the code or credential:
+The helper uses `https://gateway.tryharvest.ai` for public email-code
+registration, saves the returned credential with private file permissions,
+and can probe MCP without printing the code or credential:
 
 ```sh
 node ~/.codex/skills/harvest/register.mjs send --email you@example.com
@@ -55,10 +53,11 @@ node ~/.codex/skills/harvest/register.mjs verify --email you@example.com --code 
 node ~/.codex/skills/harvest/register.mjs probe
 ```
 
-For Claude Code, the helper is under `~/.claude/skills/harvest/`. Without an
-explicit fake/staging URL the flow stops; it never falls back to a demo, shared,
-or another user's token. The published `harvest-hosted@0.1.0` remains the
-secondary skill installer and does not enable public registration.
+For Claude Code, the helper is under `~/.claude/skills/harvest/`. Set
+`HARVEST_REGISTRATION_API_URL` only for an explicitly approved fake or staging
+gateway. The helper never falls back to a demo, shared, internal, or another
+user's token. The published `harvest-hosted@0.1.0` remains the secondary
+installer; clone + `SKILL.md` is the primary path.
 
 ## Verify this checkout
 

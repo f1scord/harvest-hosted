@@ -36,9 +36,15 @@ for (const path of files) {
 const readme = readFileSync(resolve(root, 'README.md'), 'utf8');
 const skill = readFileSync(resolve(root, 'SKILL.md'), 'utf8');
 const license = readFileSync(resolve(root, 'LICENSE'), 'utf8');
+const registrationHelper = readFileSync(resolve(root, 'scripts', 'register.mjs'), 'utf8');
 const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 if (!readme.includes('https://github.com/f1scord/harvest-hosted.git')) failures.push('README clone URL missing');
 if (!skill.startsWith('---\nname: harvest\n')) failures.push('SKILL.md frontmatter invalid');
+for (const [name, source] of [['README.md', readme], ['SKILL.md', skill], ['scripts/register.mjs', registrationHelper]]) {
+  if (!source.includes('https://gateway.tryharvest.ai')) failures.push(`${name} production registration URL missing`);
+}
+if (readme.includes('Public email-code registration is not enabled yet')) failures.push('README still says registration is unavailable');
+if (skill.includes('public registration is not live')) failures.push('SKILL still says registration is unavailable');
 if (!license.includes('All rights reserved.')) failures.push('proprietary license marker missing');
 if (packageJson.name !== 'harvest-hosted' || packageJson.version !== '0.1.0') failures.push('npm identity mismatch');
 if (packageJson.license !== 'UNLICENSED') failures.push('npm package must remain proprietary');
