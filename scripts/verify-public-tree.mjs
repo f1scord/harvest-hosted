@@ -46,6 +46,9 @@ for (const [name, source] of [['README.md', readme], ['SKILL.md', skill], ['scri
 }
 if (readme.includes('Public email-code registration is not enabled yet')) failures.push('README still says registration is unavailable');
 if (skill.includes('public registration is not live')) failures.push('SKILL still says registration is unavailable');
+if (!skill.includes('async=true') || !skill.includes('get_join_status')) {
+  failures.push('SKILL must use async join lifecycle for remote MCP clients');
+}
 if (!license.includes('All rights reserved.')) failures.push('proprietary license marker missing');
 if (packageJson.name !== 'harvest-hosted' || packageJson.version !== '0.1.0') failures.push('npm identity mismatch');
 if (packageJson.license !== 'UNLICENSED') failures.push('npm package must remain proprietary');
