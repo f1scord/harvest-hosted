@@ -30,16 +30,21 @@ npx harvest-hosted@0.1.0 --runtime codex
 The Git clone + root `SKILL.md` path above is the primary onboarding path. npm
 is a secondary installer with the same fail-closed behavior.
 
-The clone installer copies `SKILL.md` and its fail-closed registration helper.
-It never prints API keys. If an installed file differs, installation stops;
-remove or back up an old installation yourself before replacing it.
+The clone installer copies `SKILL.md` and its fail-closed registration helpers.
+For Claude Code it also registers the hosted Harvest MCP server at user scope
+with dynamic authorization, so the credential is never stored in Claude's MCP
+configuration or CLI arguments. Restart Claude Code once after installation so
+the new tools load. The installer never prints API keys. If an installed file
+differs, installation stops; remove or back up an old installation yourself
+before replacing it.
 
 ## Requirements
 
 - Node.js 18 or newer
 - A Harvest API token in `HARVEST_TOKEN`, a previously saved credential, or an
   explicitly approved fake/staging registration URL
-- A Harvest MCP endpoint configured by the supported client
+- Claude Code on `PATH` when installing for `claude-code`; the installer
+  configures the Harvest MCP endpoint automatically
 
 ## Self-serve registration
 
