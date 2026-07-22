@@ -39,7 +39,7 @@ const license = readFileSync(resolve(root, 'LICENSE'), 'utf8');
 const registrationHelper = readFileSync(resolve(root, 'scripts', 'register.mjs'), 'utf8');
 const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 if (!readme.includes('https://github.com/f1scord/harvest-hosted.git')) failures.push('README clone URL missing');
-if (!skill.startsWith('---\nname: harvest\n')) failures.push('SKILL.md frontmatter invalid');
+if (!/^---\r?\nname: harvest\r?\n/.test(skill)) failures.push('SKILL.md frontmatter invalid');
 for (const [name, source] of [['README.md', readme], ['SKILL.md', skill], ['scripts/register.mjs', registrationHelper]]) {
   if (!source.includes('https://gateway.tryharvest.ai')) failures.push(`${name} production registration URL missing`);
 }
